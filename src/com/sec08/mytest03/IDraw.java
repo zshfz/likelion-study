@@ -2,10 +2,10 @@ package com.sec08.mytest03;
 
 /*
  public interface IDraw {
- public abstract int getDraw();
+ 	public abstract int getDraw();
  }
 
- abstract class my implements IDraw {
+ abstract class my implements IDraw { //my 클래스는 IDraw의 추상메소드를 오버라이드 하지 않아서 추상 클래스여 함
  }
  */
 
