@@ -1,7 +1,15 @@
 #https://dev.mysql.com/doc/refman/8.4/en/bit-value-literals.html
 USE MY_EXAM;
-CREATE TABLE t (b BIT(8)); # 8BIT를 사용하겠다 / 부울 값(TRUE,FALSE) /플래그 
+CREATE TABLE t (
+	b BIT(8)
+); # 8BIT를 사용하겠다 / 부울 값(TRUE,FALSE) /플래그 
+
 #MYSQL 
+-- INSERT INTO 테이블명 VALUES(값,,,); //값의 순서가 맞아야 
+-- INSERT INTO 테이블명(컬럼명) VALUES(값);
+
+#set 변수 = 값
+#비트 넣을땐 접두
 INSERT INTO t SET b = b'11111111';  #255 
 INSERT INTO t SET b = b'1010';  #10 
 INSERT INTO t SET b = b'0101'; # 5
@@ -140,18 +148,40 @@ SHOW VARIABLES LIKE 'character_set_system';
 
 SHOW VARIABLES LIKE 'datadir';
 
+USE MY_EXAM;
 DROP TABLE T1;
+-- 테이블 생성해서 기본값을 대입해보자
+-- DEFAULT는 INSERT 하지않는 속성이 있다면 기본값으로 입력된다
 CREATE TABLE t1 (
   -- literal defaults
   i INT         DEFAULT 0,
   c VARCHAR(10) DEFAULT 'ABCD',
   -- expression defaults
   f FLOAT       DEFAULT (RAND() * RAND()),
-  b BINARY(16)  DEFAULT (UUID_TO_BIN(UUID())),
+  b BINARY(16)  DEFAULT (UUID_TO_BIN(UUID())), -- UUID()는 MYSQL에서 고윺 id 생성
   d DATE        DEFAULT (CURRENT_DATE + INTERVAL 1 YEAR),
   p POINT       DEFAULT (Point(0,0)),
   j JSON        DEFAULT (JSON_ARRAY())
 );
+
+-- JSON_ARRAY(): 배열 생성
+SELECT JSON_ARRAY(ENAME, JOB, SAL) AS 사원정보
+FROM MY_EMP.EMP
+WHERE DEPTNO = 10;
+
+-- JSON_OBJECT(): 객체 생성 (KEY - VALUE)	
+SELECT JSON_OBJECT('이름', ENAME, '직업', JOB, '봉급', SAL) AS 사원정보
+FROM MY_EMP.EMP
+WHERE DEPTNO = 10;
+
+-- JSON_ARRAYAGG(): GROUB BY 한 뒤 집계 결과를 JSON 배열로 리턴
+SELECT JSON_ARRAYAGG(ename) FROM emp;
+
+SELECT deptno, JSON_ARRAYAGG(ename) 
+FROM emp 
+GROUP BY deptno;
+
+
 
 DESC  T1;
 INSERT INTO T1(i) VALUES(100); 

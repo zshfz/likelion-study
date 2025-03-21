@@ -143,6 +143,7 @@ SELECT ENAME, JOB, SAL
 FROM EMP
 WHERE SAL BETWEEN 2000 AND 5000;
 
+ -- CREATE TABLE AS 문
 #Q21. 날짜는 수치 변환이 가능하다 날짜 데이트를 확인해보자
 #EMP 테이블의 구조를 확인하자
 DESC EMP;
@@ -198,6 +199,8 @@ SELECT * FROM TEST02;
 SELECT *
 FROM TEST02
 WHERE HIREDATE > '1981-01-01'; #(년월일 다 써줘야 함)
+ 
+ 
  
 #Q22.
 #Q23.
