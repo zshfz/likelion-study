@@ -24,6 +24,7 @@ PERCENT_RANK()	: 상대적 백분율 순위 계산, 첫번째 값은 0
                      NTH_VALUE()
 	 4. 프레임함수 : CUME_DIST() _누적 분포 비율  /  PERCENT_RANK()   
      
+     
     [선언형식 ]
     frame_extent:    {frame_start | frame_between}       -> 프레임시작위치 | 끝과  마지막 지정
 
@@ -181,21 +182,23 @@ ORDER BY  1;
 SELECT HIREDATE, COUNT(*) OVER (ORDER BY HIREDATE) AS "CNT"
 FROM EMP;
 
+-- 3월 26일
+
 -- Q13) 년도별 고용수를 확인 하자.  
+-- CASE 1 : YEAR(), GROUP BY
 SELECT   YEAR(HIREDATE) , COUNT(*) AS EMP_COUNT
 FROM   EMP
 GROUP BY   YEAR(HIREDATE) 
 ORDER BY 1 ; 
 
--- 3월 26일 --
-
+-- CASE 2 : EXTRACT(unit FROM date) EXTRACT(날짜속성 FROM date컬럼명) 
 SELECT   EXTRACT(YEAR FROM HIREDATE)  AS  년도 , 
           COUNT(*) AS EMP_COUNT
 FROM   EMP
 GROUP BY    EXTRACT(YEAR FROM HIREDATE)
 ORDER BY 1 ; 
 
-
+-- CASE 3 : EXTRACT(unit FROM date) EXTRACT(날짜속성 FROM date컬럼명)를 사용하고 별싱 사용
 SELECT   EXTRACT(YEAR FROM HIREDATE)  AS  년도 , 
           COUNT(*) AS EMP_COUNT
 FROM   EMP
@@ -205,6 +208,7 @@ ORDER BY 1 ;
 -- Q14)  사원테이블에서 부서 번호와 각 부서 (DEPTNO) 직원의 평균 재직 기간(년)을 출력 하자.  
      --  현재 날짜는 오늘날짜로, 직원이 있는 부서만 계산을 한다.  
      -- AVG, TIMESTAMPDIFF , COUNT 사용 
+     -- TIMESTAMPDIFF(unit,datetime_expr1,datetime_expr2) 리턴값은 INTEGER
      
      SELECT DEPTNO,  AVG(TIMESTAMPDIFF(YEAR, HIREDATE,NOW())) AS "평균재직기간" 
      FROM EMP
@@ -219,7 +223,10 @@ ORDER BY 1 ;
  -- Q16) 급여의 변동을 확인해 보고 싶다.  : 모집단 표본을 기본으로 분산하겠다. 
   -- 전체 데이터 셋이 아닌 표본 데이터 셋을 활용 
  --  부서번호와 각 부서에 대한 표본 분산을 출력 해보자.  
+ -- VAR_SAMP(expr) : 표본분산
+ -- VAR_POP(expr) : 모집단 분산
  
+ -- CASE 1
    SELECT DEPTNO ,   VAR_SAMP(SAL) AS "RES"
    FROM EMP
    GROUP BY DEPTNO ;
@@ -228,10 +235,16 @@ ORDER BY 1 ;
    SELECT DEPTNO ,   VAR_SAMP(SAL) AS "RES"
    FROM EMP
    GROUP BY DEPTNO ;
+   
+-- CASE 2. 윈도우 함수를 활용해서 부서별로 급여의 표본분산 출력하자
+	SELECT DEPTNO ,   VAR_SAMP(SAL) OVER(PARTITION BY DEPTNO) AS "RES"
+	FROM EMP;
+	
      
  -- Q17) 부서내 급여 표준 편차  : 부서의 개인 급여가 부서의 평균 급여와 얼마나 다른지 측정하는 것  
  --  STDDEV(EXPR)  :  표준 편차가 높을 수록 급여의 범위가 넓다.  
  -- 사원의 각 부서별 봉급의 표준 편차 계산해 보자.  
+ -- 데이터가 평균을 중심으로 얼마나 퍼져있는지 나타냄
  SELECT DEPTNO, 
         STDDEV(SAL) AS RES  # 모집단 표본을 기본으로 분산하겠다.  
  FROM EMP
@@ -241,7 +254,7 @@ ORDER BY 1 ;
  SELECT  CONCAT(ENAME,'님의 월급은',SAL,'입니다') as message
  FROM EMP;
  /*
- 
+ 그룹된 값은 하나의 문자열로 만들어줌
 GROUP_CONCAT([DISTINCT] expr [,expr ...]
              [ORDER BY {unsigned_integer | col_name | expr}
                  [ASC | DESC] [,col_name ...]]

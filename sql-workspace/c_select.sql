@@ -8,7 +8,7 @@ WHERE 컬럼명 LIKE '패턴';
 
 패턴 종류
 %	0개 이상 모든 문자
-_	정확히 1개 문자
+_	정확히 1개 문자패
 ex)
 'A%':	A로 시작	ALICE, ANDY 매칭
 '%A':	A로 끝남	LISA, NINA 매칭
@@ -157,11 +157,16 @@ GROUPING : GROUPING 함수는  그룹 기준에서 고려하지 않은 부분 �
 					
 */
 -- Q1) 사원의 커미션의 합계, 각 사원에 대한 커미션의 총합, 전체 커미션 총합을 출력하자.  
+SELECT ENAME, COMM, SUM(COMM)  AS "SUM"
+FROM EMP
+GROUP BY ENAME, COMM 
+ORDER BY 2;
+
 SELECT ENAME, COMM, SUM(COMM)  AS "SUM",
      GROUPING(ENAME), GROUPING(COMM) 
 FROM EMP
-GROUP BY ENAME, COMM WITH ROLLUP -- 그룹 결과에 추가로 소계, 전체합계 자동 계산
-ORDER BY 2;
+GROUP BY ENAME, COMM WITH ROLLUP; -- 그룹 결과에 추가로 소계, 전체합계 자동 계산
+
 
 /*---------------ROW_NUMBER()---------------------------
 SELECT ROW_NUMBER() [OVER  PARTITION BY, 
