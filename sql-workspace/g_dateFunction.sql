@@ -98,6 +98,15 @@ FROM dept
 ORDER BY loc ASC
 LIMIT 1;
 
+#### use world ####
+-- DB 전환
+use world;
+-- city 구조 확인 22번부터 city 테이블 문제는 스킵
+DESC city;
+DESC country;
+
+SELECT * FROM city;
+
 -- Q22. world의 city 테이블에서 각 도시의 개월 수를 계산하라 (현재 날짜 기준).
 -- 예: 도시명, 개월 수
 SELECT city, TIMESTAMPDIFF(MONTH, date, CURDATE()) AS months_since_established
