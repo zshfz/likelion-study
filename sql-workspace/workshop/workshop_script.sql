@@ -617,3 +617,58 @@ WHERE AUTHOR IS NULL;
 SELECT TITLE, RENT_CNT,
 	RANK() OVER (ORDER BY RENT_CNT DESC)
 FROM book;
+
+#워크샵 3
+use mywork;
+-- 1
+select user_id, reg_date, title, content
+from board;
+
+-- 2
+select user_id, member.grade, title, content
+from board join member using(user_id)
+where is_del = 0;
+
+-- 3
+select user_id, grade, title, content
+from board join member using(user_id)
+where user_id = 'socrates';
+
+-- 4
+select user_id, email, grade
+from member join member_info using(user_id)
+where year(leave_date) = 2023 and month(leave_date) = 12;
+
+-- 5
+
+
+-- 6
+select rm_idx, user_id, reg_date, title
+from member join rent_master using(user_id)
+where reg_date > '2023-06-10';
+
+-- 7
+select rm_idx, user_id, title, reg_date
+from member join rent_master using(user_id)
+where is_return = 0 and grade = 'role_user';
+
+-- 8
+select user_id, email, rent_book_cnt
+from member join rent_master using(user_id)
+where rent_book_cnt >= 2;
+
+-- 9
+-- 10
+select user_id, email, rent_book_cnt
+from member join rent_master using(user_id)
+where is_leave = 0
+order by rent_book_cnt desc
+limit 1;
+
+-- 11
+select distinct rm_idx, user_id, rent_master.reg_date, state as INFO
+from rent_master join rent_book using(rm_idx)  
+where state = 're02';
+
+-- 12
+
