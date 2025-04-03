@@ -22,6 +22,44 @@
  • 테이블의 행 개수가 별로 없는 경우, 인덱스가 바람직하지 않다
 */
 
+-- Q1. 함수 기반 인덱스를 활용해 보자'
+use my_emp;
+CREATE TABLE tbl (
+  col1 LONGTEXT,
+  INDEX idx1 ((SUBSTRING(col1, 1, 10)))
+);
+desc tbl;
+insert into tbl values ('11111111111111111');
+insert into tbl values ('1234567890');
+insert into tbl values ('123456789');
+select * from tbl;
 
+-- 함수형 인덱스 적용 확인
+explain
+SELECT * FROM tbl WHERE SUBSTRING(col1, 1, 9) = '123456789';
+
+-- 함수형 인덱스 적용 확인
+
+-- Q2. EMP 테이블을 EMP_TEST로 만들어서 내보내자
+drop table emp_test;
+
+create table emp_test
+as
+select *
+from emp;
+explain
+SELECT * FROM tbl WHERE SUBSTRING(col1, 1, 10) = '1234567890';
+
+select * from emp_test;
+
+drop table employees;
+CREATE TABLE employees (
+  data JSON,
+  ID INT,
+  -- INDEX ((data->>'$.name')) 이렇게 하면 에러 (name에 어떤 타입의 값이 들어올지 모르기 때문에 에러뜸)
+    INDEX ((CAST(data->>'$.name' AS CHAR(30))))
+);
+
+SELECT * FROM employees WHERE data->>'$.name' = 'James';
 
 
