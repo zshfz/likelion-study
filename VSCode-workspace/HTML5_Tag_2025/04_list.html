@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>리스트 태그</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <style>
+      ul {
+        list-style-type: circle;
+      }
+      ul.icon li::before {
+        content: "😂";
+      }
+      ol {
+        list-style-type: lower-roman;
+      }
+      li {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>순서 없는 리스트</h3>
+    <ul class="icon">
+      <li class="fas fa-user">HTML</li>
+      <li>CSS</li>
+      <li>JS</li>
+    </ul>
+    <h3>순서 있는 리스트</h3>
+    <ol>
+      <li>기획</li>
+      <li>설계</li>
+      <li>구현</li>
+    </ol>
+  </body>
+</html>
