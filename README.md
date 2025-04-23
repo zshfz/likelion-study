@@ -15,9 +15,7 @@
 ```bash
 study/
 ├── eclipse-workspace/
-│   └── ...
 ├── intelliJ-workspace/
-│   └── ShoppingMallOrderSystem/ # 쇼핑몰 주문 미니 프로젝트
 ├── sql-workspace/
 ├── VSCode-workspace/
 ├── curriculum.xlsx
